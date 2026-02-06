@@ -9,52 +9,67 @@ option_chain = [
     {"strike": 25400, "type": "CE", "oi": 130000, "iv": 16.8},
     {"strike": 25400, "type": "PE", "oi": 160000, "iv": 17.2},
 ]
-print("option chain data loaded successfully")
+
 
 # Step 2: Find highest IV option
 
-highest_iv = 0
-highest_iv_option = None
+def get_highest_iv(option_chain):
+    highest_iv = 0
+    highest_iv_option = None
 
-for option in option_chain:
-    if option["iv"] > highest_iv:
-        highest_iv = option["iv"]
-        highest_iv_option = option
+    for option in option_chain:
+        if option["iv"] > highest_iv:
+            highest_iv = option["iv"]
+            highest_iv_option = option
 
-print(
-    "Highest IV:",
-    highest_iv_option["strike"],
-    highest_iv_option["type"],
-    "(" + str(highest_iv_option["iv"]) + ")"
-)
+    return highest_iv_option
+
 
 # Step 3: Calculate Put-Call Ratio (PCR)
 
-total_put_oi = 0
-total_call_oi = 0
+def calculate_pcr(option_chain):
+    total_put_oi = 0
+    total_call_oi = 0
 
-for option in option_chain:
-    if option["type"] == "PE":
-        total_put_oi += option["oi"]
-    elif option["type"] == "CE":
-        total_call_oi += option["oi"]
+    for option in option_chain:
+        if option["type"] == "PE":
+            total_put_oi += option["oi"]
+        elif option["type"] == "CE":
+            total_call_oi += option["oi"]
 
-pcr = total_put_oi / total_call_oi
-
-print("total Put OI:", total_put_oi)
-print("total Call OI:", total_call_oi)
-print("PCR:", round(pcr,2))
+    return total_put_oi / total_call_oi
        
 # Step 4: Market bias based on PCR
 
-if pcr > 1.2:
-    bias = "Bearish"
-elif pcr < 0.8:
-    bias = "Bullish"
-else:
-    bias = "Neutral"
+def market_bias(pcr):
+    if pcr > 1.2:
+        return "Bearish"
+    elif pcr < 0.8:
+        return "Bullish"
+    else:
+        return "Neutral"
 
-print("Market Bias",bias)
+# Step 5: Final Summary
+def main():
+    highest_iv_option = get_highest_iv(option_chain)
+    pcr = calculate_pcr(option_chain)
+    bias = market_bias(pcr)
+
+    print("\n--- Options Data Summary --- ")
+    print(
+        "Highest iv option",
+        highest_iv_option["strike"],
+        highest_iv_option["type"],
+        highest_iv_option["iv"]
+    )
+    print("PCR:", round(pcr,2))
+    print("Market Bias",bias)
+
+
+if __name__ == "__main__":
+    main()
+
+
 
 
 
