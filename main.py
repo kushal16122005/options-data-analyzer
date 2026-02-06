@@ -45,6 +45,16 @@ print("total Put OI:", total_put_oi)
 print("total Call OI:", total_call_oi)
 print("PCR:", round(pcr,2))
        
+# Step 4: Market bias based on PCR
+
+if pcr > 1.2:
+    bias = "Bearish"
+elif pcr < 0.8:
+    bias = "Bullish"
+else:
+    bias = "Neutral"
+
+print("Market Bias",bias)
 
 
 
